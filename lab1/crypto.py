@@ -4,8 +4,8 @@ File: crypto.py
 ---------------
 Assignment 1: Cryptography
 Course: CS 41
-Name: <YOUR NAME>
-SUNet: <SUNet ID>
+Name: Filep Matyas
+SUNet: fmim2442
 
 Replace this with a description of the program.
 """
@@ -16,9 +16,30 @@ import utils
 def encrypt_caesar(plaintext):
     """Encrypt plaintext using a Caesar cipher.
 
+    ord fggv Karakter to - asci
+
     Add more implementation details here.
     """
-    raise NotImplementedError  # Your implementation here
+
+    caesarcode_list = []
+
+    for karakter in plaintext:
+        kod = ord(karakter)
+    
+        if 48 <= kod <= 57:      
+            caesarcode_list.append(karakter)
+        elif 65 <= kod <= 87:    
+            caesarcode_list.append(chr(kod + 3))
+        elif 88 <= kod <= 90:    
+            caesarcode_list.append(chr(kod + 3 - 26))
+        else:
+            caesarcode_list.append(karakter)
+
+    caesarcode = "".join(caesarcode_list)
+    #raise NotImplementedError  # Your implementation here
+
+    return caesarcode
+    #return caesarcode_list
 
 
 def decrypt_caesar(ciphertext):
@@ -26,7 +47,25 @@ def decrypt_caesar(ciphertext):
 
     Add more implementation details here.
     """
-    raise NotImplementedError  # Your implementation here
+
+    plaintext = []
+    
+    for karakter in ciphertext:
+            kod = ord(karakter)
+            if 48 <= kod <= 57:      
+                plaintext.append(karakter)
+            elif 68 <= kod <= 90:    
+                plaintext.append(chr(kod - 3))
+            elif 65 <= kod <= 67:    
+                plaintext.append(chr(kod - 3 + 26))
+            else:
+                plaintext.append(karakter)
+    #raise NotImplementedError  # Your implementation here
+    
+    plaintext_string = "".join(plaintext)
+
+    return plaintext_string
+    #raise NotImplementedError  # Your implementation here
 
 
 # Vigenere Cipher
