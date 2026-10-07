@@ -25,14 +25,12 @@ def encrypt_caesar(plaintext):
     caesarcode_list = []
 
     for karakter in plaintext:
-        kod = ord(karakter)
-    
-        if 48 <= kod <= 57:      
-            caesarcode_list.append(karakter)
-        elif 65 <= kod <= 87:    
-            caesarcode_list.append(chr(kod + 3))
-        elif 88 <= kod <= 90:    
-            caesarcode_list.append(chr(kod + 3 - 26))
+        if 65 <= ord(karakter) <= 90:
+            pos_karakter = ord(karakter) - 65
+            
+            shifted_char = (pos_karakter + 3) % 26
+            
+            caesarcode_list.append(chr(shifted_char + 65))
         else:
             caesarcode_list.append(karakter)
 
@@ -50,18 +48,16 @@ def decrypt_caesar(ciphertext):
     """
 
     plaintext = []
-    
+
     for karakter in ciphertext:
-            kod = ord(karakter)
-            if 48 <= kod <= 57:      
-                plaintext.append(karakter)
-            elif 68 <= kod <= 90:    
-                plaintext.append(chr(kod - 3))
-            elif 65 <= kod <= 67:    
-                plaintext.append(chr(kod - 3 + 26))
-            else:
-                plaintext.append(karakter)
-    #raise NotImplementedError  # Your implementation here
+        if 65 <= ord(karakter) <= 90:
+            pos_karakter = ord(karakter) - 65
+            
+            shifted_char = (pos_karakter - 3) % 26
+            
+            plaintext.append(chr(shifted_char + 65))
+        else:
+            plaintext.append(karakter)
     
     plaintext_string = "".join(plaintext)
 
@@ -84,9 +80,9 @@ def encrypt_vigenere(plaintext, keyword):
             pos_karakter = ord(karakter) - 65
             pos_keyword = ord(karakter2) - 65 # 0-25 kozti szamokka alakitjuk
             
-            uj_pozicio = (pos_karakter + pos_keyword) % 26
+            shifted_char = (pos_karakter + pos_keyword) % 26
             
-            vigenere_code.append(chr(uj_pozicio + 65))
+            vigenere_code.append(chr(shifted_char + 65))
         else:
             vigenere_code.append(karakter)
 
@@ -110,9 +106,9 @@ def decrypt_vigenere(ciphertext, keyword):
             pos_karakter = ord(karakter) - 65
             pos_keyword = ord(karakter2) - 65 # 0-25 kozti szamokka alakitjuk
                
-            uj_pozicio = (pos_karakter - pos_keyword) % 26
+            shifted_char = (pos_karakter - pos_keyword) % 26
                
-            vigenere_decode.append(chr(uj_pozicio + 65))
+            vigenere_decode.append(chr(shifted_char + 65))
         else:
             vigenere_decode.append(karakter)
    
