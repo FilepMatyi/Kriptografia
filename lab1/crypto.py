@@ -1,4 +1,5 @@
 #!/usr/bin/env python3 -tt
+from itertools import cycle
 """
 File: crypto.py
 ---------------
@@ -75,7 +76,25 @@ def encrypt_vigenere(plaintext, keyword):
 
     Add more implementation details here.
     """
-    raise NotImplementedError  # Your implementation here
+
+    vigenere_code = []
+
+    for karakter, karakter2 in zip(plaintext, cycle(keyword)):
+        if 65 <= ord(karakter) <= 90:
+            pos_karakter = ord(karakter) - 65
+            pos_keyword = ord(karakter2) - 65 # 0-25 kozti szamokka alakitjuk
+            
+            uj_pozicio = (pos_karakter + pos_keyword) % 26
+            
+            vigenere_code.append(chr(uj_pozicio + 65))
+        else:
+            vigenere_code.append(karakter)
+
+    vigenere = "".join(vigenere_code)
+
+    return vigenere
+
+    #raise NotImplementedError  # Your implementation here
 
 
 def decrypt_vigenere(ciphertext, keyword):
@@ -83,7 +102,25 @@ def decrypt_vigenere(ciphertext, keyword):
 
     Add more implementation details here.
     """
-    raise NotImplementedError  # Your implementation here
+    
+    vigenere_decode = []
+   
+    for karakter, karakter2 in zip(ciphertext, cycle(keyword)):
+        if 65 <= ord(karakter) <= 90:
+            pos_karakter = ord(karakter) - 65
+            pos_keyword = ord(karakter2) - 65 # 0-25 kozti szamokka alakitjuk
+               
+            uj_pozicio = (pos_karakter - pos_keyword) % 26
+               
+            vigenere_decode.append(chr(uj_pozicio + 65))
+        else:
+            vigenere_decode.append(karakter)
+   
+    vigenere = "".join(vigenere_decode)
+   
+    return vigenere
+    
+    #raise NotImplementedError  # Your implementation here
 
 
 # Merkle-Hellman Knapsack Cryptosystem
