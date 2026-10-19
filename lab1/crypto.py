@@ -119,6 +119,28 @@ def decrypt_vigenere(ciphertext, keyword):
     #raise NotImplementedError  # Your implementation here
 
 
+def encrypt_scytale(plaintext, key):
+    result = ""
+
+    for row in range(key):
+        for i in range(row, len(plaintext), key):
+            result += plaintext[i]
+
+    return result
+
+
+def decrypt_scytale(ciphertext, key):
+    result = [""] * len(ciphertext)
+    index = 0
+
+    for row in range(key):
+        for i in range(row, len(ciphertext), key):
+            result[i] = ciphertext[index]
+            index += 1
+
+    return "".join(result)
+
+
 # Merkle-Hellman Knapsack Cryptosystem
 
 def generate_private_key(n=8):
