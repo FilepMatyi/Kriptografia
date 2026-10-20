@@ -12,6 +12,38 @@ Replace this with a description of the program.
 """
 import utils
 
+
+
+def check_text(text):
+    if not isinstance(text, str):
+        raise TypeError("The message must be a string.")
+
+    return text
+
+
+def check_number(number):
+    if type(number) is not int:
+        raise TypeError("The key must be an integer.")
+
+    if number <= 0:
+        raise ValueError("The key must be greater than zero.")
+
+
+def check_keyword(keyword):
+    if not isinstance(keyword, str):
+        raise TypeError("The keyword must be a string.")
+
+    keyword = keyword.upper()
+
+    if not keyword:
+        raise ValueError("The keyword cannot be empty.")
+
+    if any(not ("A" <= char <= "Z") for char in keyword):
+        raise ValueError("The keyword must contain only letters A-Z.")
+
+    return keyword
+
+
 # Caesar Cipher
 
 def encrypt_caesar(plaintext):
@@ -21,6 +53,7 @@ def encrypt_caesar(plaintext):
 
     Add more implementation details here.
     """
+    plaintext = check_text(plaintext).upper()
 
     caesarcode_list = []
 
@@ -46,6 +79,8 @@ def decrypt_caesar(ciphertext):
 
     Add more implementation details here.
     """
+    ciphertext = check_text(ciphertext).upper()
+
 
     plaintext = []
 
@@ -67,28 +102,28 @@ def decrypt_caesar(ciphertext):
 
 # Vigenere Cipher
 
+
 def encrypt_vigenere(plaintext, keyword):
-    """Encrypt plaintext using a Vigenere cipher with a keyword.
+    plaintext = check_text(plaintext).upper()
+    keyword = check_keyword(keyword)
 
-    Add more implementation details here.
-    """
+    result = []
+    k = 0
 
-    vigenere_code = []
-
-    for karakter, karakter2 in zip(plaintext, cycle(keyword)):
-        if 65 <= ord(karakter) <= 90:
+    for karakter in plaintext:
+        if "A" <= karakter <= "Z":
             pos_karakter = ord(karakter) - 65
-            pos_keyword = ord(karakter2) - 65 # 0-25 kozti szamokka alakitjuk
-            
+            pos_keyword = ord(keyword[k % len(keyword)]) - 65
+
             shifted_char = (pos_karakter + pos_keyword) % 26
-            
-            vigenere_code.append(chr(shifted_char + 65))
+
+            result.append(chr(shifted_char + 65))
+            k += 1
         else:
-            vigenere_code.append(karakter)
+            result.append(karakter)
 
-    vigenere = "".join(vigenere_code)
+    return "".join(result)
 
-    return vigenere
 
     #raise NotImplementedError  # Your implementation here
 
@@ -99,28 +134,38 @@ def decrypt_vigenere(ciphertext, keyword):
     Add more implementation details here.
     """
     
-    vigenere_decode = []
-   
-    for karakter, karakter2 in zip(ciphertext, cycle(keyword)):
-        if 65 <= ord(karakter) <= 90:
+    ciphertext = check_text(ciphertext).upper()
+    keyword = check_keyword(keyword)
+    
+    result = []
+    k = 0
+    
+    for karakter in ciphertext:
+        if "A" <= karakter <= "Z":
             pos_karakter = ord(karakter) - 65
-            pos_keyword = ord(karakter2) - 65 # 0-25 kozti szamokka alakitjuk
-               
+            pos_keyword = ord(keyword[k % len(keyword)]) - 65
+    
             shifted_char = (pos_karakter - pos_keyword) % 26
-               
-            vigenere_decode.append(chr(shifted_char + 65))
+    
+            result.append(chr(shifted_char + 65))
+            k += 1
         else:
-            vigenere_decode.append(karakter)
-   
-    vigenere = "".join(vigenere_decode)
-   
-    return vigenere
+            result.append(karakter)
+    
+    return "".join(result)
+    
     
     #raise NotImplementedError  # Your implementation here
 
 
 def encrypt_scytale(plaintext, key):
+    check_text(plaintext)
+    check_number(key)
+   
+   
     result = ""
+
+
 
     for row in range(key):
         for i in range(row, len(plaintext), key):
@@ -130,6 +175,10 @@ def encrypt_scytale(plaintext, key):
 
 
 def decrypt_scytale(ciphertext, key):
+
+    check_text(ciphertext)
+    check_number(key)
+
     result = [""] * len(ciphertext)
     index = 0
 
@@ -143,8 +192,8 @@ def decrypt_scytale(ciphertext, key):
 
 
 def encrypt_railfence(plaintext, num_rows):
-    if num_rows < 1:
-        raise ValueError("Error")
+    check_text(plaintext)
+    check_number(num_rows)
 
     if num_rows == 1:
         return plaintext
@@ -168,8 +217,8 @@ def encrypt_railfence(plaintext, num_rows):
 
 
 def decrypt_railfence(ciphertext, num_rows):
-    if num_rows < 1:
-        raise ValueError("Error")
+    check_text(ciphertext)
+    check_number(num_rows)
 
     if num_rows == 1:
         return ciphertext

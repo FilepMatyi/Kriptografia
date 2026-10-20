@@ -9,10 +9,16 @@ If you are a student, you shouldn't need to change anything in this file.
 """
 import random
 
-from crypto import (encrypt_caesar, decrypt_caesar,
-                    encrypt_vigenere, decrypt_vigenere,
-                    generate_private_key, create_public_key,
-                    encrypt_mh, decrypt_mh)
+from crypto import (
+    encrypt_caesar,
+    decrypt_caesar,
+    encrypt_vigenere,
+    decrypt_vigenere,
+    encrypt_scytale,
+    decrypt_scytale,
+    encrypt_railfence,
+    decrypt_railfence,
+)
 
 
 #############################
@@ -21,8 +27,10 @@ from crypto import (encrypt_caesar, decrypt_caesar,
 
 def get_tool():
     print("* Tool *")
-    return _get_selection("(C)aesar, (V)igenere or (M)erkle-Hellman? ", "CVM")
-
+    return _get_selection(
+        "(C)aesar, (V)igenere, (S)cytale or (R)ailfence? ",
+        "CVSR"
+    )
 
 def get_action():
     """Return true iff encrypt"""
@@ -161,6 +169,50 @@ def run_merkle_hellman():
     set_output(output)
 
 
+    
+def get_positive_number(prompt):
+    while True:
+        try:
+            number = int(input(prompt))
+            if number > 0:
+                return number
+        except ValueError:
+            pass
+
+        print("Please enter a positive integer.")
+
+
+def run_scytale():
+    action = get_action()
+    data = get_input()
+    key = get_positive_number("Circumference? ")
+
+    print("* Transform *")
+
+    if action == 'E':
+        output = encrypt_scytale(data, key)
+    else:
+        output = decrypt_scytale(data, key)
+
+    set_output(output)
+
+
+def run_railfence():
+    action = get_action()
+    data = get_input()
+    num_rows = get_positive_number("Number of rows? ")
+
+    print("* Transform *")
+
+    if action == 'E':
+        output = encrypt_railfence(data, num_rows)
+    else:
+        output = decrypt_railfence(data, num_rows)
+
+    set_output(output)
+
+
+
 def run_suite():
     """
     Runs a single iteration of the cryptography suite.
@@ -173,20 +225,30 @@ def run_suite():
     # This isn't the cleanest way to implement functional control flow,
     # but I thought it was too cool to not sneak in here!
     commands = {
-        'C': run_caesar,         # Caesar Cipher
-        'V': run_vigenere,       # Vigenere Cipher
-        'M': run_merkle_hellman  # Merkle-Hellman Knapsack Cryptosystem
+        'C': run_caesar,
+        'V': run_vigenere,
+        'S': run_scytale,
+        'R': run_railfence
     }
     commands[tool]()
 
 
+
 def main():
-    """Harness for CS41 Assignment 1"""
     print("Welcome to the Cryptography Suite!")
-    run_suite()
-    while get_yes_or_no("Again?"):
-        run_suite()
+
+    while True:
+        try:
+            run_suite()
+        except (ValueError, TypeError, FileNotFoundError,
+                PermissionError) as error:
+            print("Error:", error)
+
+        if not get_yes_or_no("Again?"):
+            break
+
     print("Goodbye!")
+
 
 
 if __name__ == '__main__':
