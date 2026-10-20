@@ -141,6 +141,66 @@ def decrypt_scytale(ciphertext, key):
     return "".join(result)
 
 
+
+def encrypt_railfence(plaintext, num_rows):
+    if num_rows < 1:
+        raise ValueError("Error")
+
+    if num_rows == 1:
+        return plaintext
+
+    rows = [""] * num_rows
+
+    row = 0
+    direction = 1
+
+    for char in plaintext:
+        rows[row] += char
+
+        if row == 0:
+            direction = 1
+        elif row == num_rows - 1:
+            direction = -1
+
+        row += direction
+
+    return "".join(rows)
+
+
+def decrypt_railfence(ciphertext, num_rows):
+    if num_rows < 1:
+        raise ValueError("Error")
+
+    if num_rows == 1:
+        return ciphertext
+
+    pattern = []
+    row = 0
+    direction = 1
+
+    for char in ciphertext:
+        pattern.append(row)
+
+        if row == 0:
+            direction = 1
+        elif row == num_rows - 1:
+            direction = -1
+
+        row += direction
+
+    result = [""] * len(ciphertext)
+    index = 0
+
+    for rail in range(num_rows):
+        for i in range(len(ciphertext)):
+            if pattern[i] == rail:
+                result[i] = ciphertext[index]
+                index += 1
+
+    return "".join(result)
+
+
+
 # Merkle-Hellman Knapsack Cryptosystem
 
 def generate_private_key(n=8):
