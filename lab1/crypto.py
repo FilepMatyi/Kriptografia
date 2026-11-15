@@ -161,11 +161,8 @@ def decrypt_vigenere(ciphertext, keyword):
 def encrypt_scytale(plaintext, key):
     check_text(plaintext)
     check_number(key)
-   
-   
+    
     result = ""
-
-
 
     for row in range(key):
         for i in range(row, len(plaintext), key):
@@ -188,6 +185,41 @@ def decrypt_scytale(ciphertext, key):
             index += 1
 
     return "".join(result)
+
+
+
+def encrypt_binary_scytale(input_file, output_file, key):
+    check_number(key)
+
+    with open(input_file, "rb") as file:
+        data = file.read()
+
+    result = bytearray()
+
+    for row in range(key):
+        for i in range(row, len(data), key):
+            result.append(data[i])
+
+    with open(output_file, "wb") as file:
+        file.write(result)
+
+
+def decrypt_binary_scytale(input_file, output_file, key):
+    check_number(key)
+
+    with open(input_file, "rb") as file:
+        data = file.read()
+
+    result = bytearray(len(data))
+    index = 0
+
+    for row in range(key):
+        for i in range(row, len(data), key):
+            result[i] = data[index]
+            index += 1
+
+    with open(output_file, "wb") as file:
+        file.write(result)
 
 
 
@@ -227,7 +259,7 @@ def decrypt_railfence(ciphertext, num_rows):
     row = 0
     direction = 1
 
-    for char in ciphertext:
+    for _ in ciphertext:
         pattern.append(row)
 
         if row == 0:
@@ -240,9 +272,12 @@ def decrypt_railfence(ciphertext, num_rows):
     result = [""] * len(ciphertext)
     index = 0
 
+    #rail - melyik sort dolgozzuk fel
+    #i - eredeti szoveg melyik pozicioja
+    #index - titkositott szovegben
     for rail in range(num_rows):
         for i in range(len(ciphertext)):
-            if pattern[i] == rail:
+            if pattern[i] == rail:  # csak akkor tesszuk bele ha jo sorban vagyunk
                 result[i] = ciphertext[index]
                 index += 1
 

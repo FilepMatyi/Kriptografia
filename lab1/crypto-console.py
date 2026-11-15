@@ -18,6 +18,8 @@ from crypto import (
     decrypt_scytale,
     encrypt_railfence,
     decrypt_railfence,
+    encrypt_binary_scytale,
+    decrypt_binary_scytale
 )
 
 
@@ -28,8 +30,8 @@ from crypto import (
 def get_tool():
     print("* Tool *")
     return _get_selection(
-        "(C)aesar, (V)igenere, (S)cytale or (R)ailfence? ",
-        "CVSR"
+        "(C)aesar, (V)igenere, (S)cytale or (R)ailfence? or B(inary)",
+        "CVSRB"
     )
 
 def get_action():
@@ -185,7 +187,7 @@ def get_positive_number(prompt):
 def run_scytale():
     action = get_action()
     data = get_input()
-    key = get_positive_number("Circumference? ")
+    key = get_positive_number("Row Number? ")
 
     print("* Transform *")
 
@@ -196,6 +198,21 @@ def run_scytale():
 
     set_output(output)
 
+def run_binary_scytale():
+    action = get_action()
+
+    input_file = get_filename()
+
+    output_file = input("Output filename? ")
+
+    key = get_positive_number("Key? ")
+
+    if action == "E":
+        encrypt_binary_scytale(input_file, output_file, key)
+    else:
+        decrypt_binary_scytale(input_file, output_file, key)
+
+    print("File processed successfully!")
 
 def run_railfence():
     action = get_action()
@@ -228,7 +245,8 @@ def run_suite():
         'C': run_caesar,
         'V': run_vigenere,
         'S': run_scytale,
-        'R': run_railfence
+        'R': run_railfence,
+        'B': run_binary_scytale
     }
     commands[tool]()
 
